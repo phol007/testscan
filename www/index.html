@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <title>Test Scanitem</title>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="css/bootstrap-treeview.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.css">
+    <script src="js/angular.min.js"></script>
+    <link rel="stylesheet" href="css/alertify.core.css" />
+    <link rel="stylesheet" href="css/alertify.default.css" id="toggleCSS" />
+</head>
+
+<body ng-app="camera" ng-controller="cmr">
+<div class="app" style="display:none">
+    <div id="deviceready" class="blink">
+        <p class="event listening">Connecting to Device</p>
+        <p class="event received" style="display:none">Device is Ready</p>
+
+    </div>
+</div>
+<!-- ////////////////////// page one ///////////////////////////////-->
+<div data-role="page" id="pageone">
+    <div data-role="none" class="header">
+    </div>
+
+    <div data-role="main" class="ui-content">
+        <div id="form-main">
+
+            <div id="form-div" style="padding-bottom:0;">
+                <label style="font-size:20px; padding-top:5%;"><img src="img/barcoder-icon.png" width="32">&nbsp;&nbsp;<b>ระบบทดสอบบาร์โค้ดสินค้า</b></label>
+                <div id="scanitem">
+                    <label id="shelves1" style="padding:5%;"><img src="img/item.png" width="80%" style="margin:2% 2% 5% 5%;">
+                        <b style="margin-top:0;" class="scbar"><h3 style="margin-top:0;">SCANBARCODE</h3>
+                            <h4>
+                                สินค้า
+                            </h4>
+                        </b></label>
+                </div>
+
+                <div id="detail" width="100%" style="padding:0; display:none;">
+                    <label id="image"><img src='img/ajax_loader.gif' width="25%" style="border-radius:9px;"></label>
+                    <hr width="80%">
+                    <label id="barcode"></label>
+                    <label id="itemcode"></label>
+                    <label id="itemname"></label>
+                    <label id="price"></label>
+                    <label id="barcodelist"></label>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div data-role="none" class="footer">
+        <div data-role="navbar">
+            <ul id="1">
+                <li onclick="ref()"><a href="#" class="ui-btn-active ui-state-persist" data-icon="refresh" id="footer-nav" data-transition="slidefade" data-direction="reverse">Refresh</a></li>
+                <li><a href="#setting" class="ui-btn-active ui-state-persist" data-icon="gear" id="footer-nav" data-transition="slidefade" data-direction="reverse">setting</a></li>
+            </ul>
+
+            <ul id="2" style="display:none;">
+                <li onclick="ref()"><a href="#" class="ui-btn-active ui-state-persist" data-icon="refresh" id="footer-nav" data-transition="slidefade" data-direction="reverse">Refresh</a></li>
+                <li  ng-click="selectPicture(Camera.PictureSourceType.CAMERA)"><a href="#" class="ui-btn-active ui-state-persist" data-icon="camera" id="footer-nav" data-transition="slidefade" data-direction="reverse">camera</a></li>
+                <li><a href="#setting" class="ui-btn-active ui-state-persist" data-icon="gear" id="footer-nav" data-transition="slidefade" data-direction="reverse">setting</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+<!-- ////////////////////// page one ///////////////////////////////-->
+<!-- ////////////////////// upload ///////////////////////////////-->
+<div data-role="page" id="uploadimg">
+    <div data-role="none" class="header">
+    </div>
+
+    <div data-role="main" class="ui-content">
+        <div id="form-main">
+
+            <div id="form-div" style="padding-bottom:0;">
+                <label style="font-size:20px; padding-top:5%;"><img src="img/barcoder-icon.png" width="32">&nbsp;&nbsp;<b>ระบบทดสอบบาร์โค้ดสินค้า</b></label>
+                <div>
+                    <img ng-src="{{pathForImage(image)}}" style="width: 100%; height: 100%; border-radius:9px;">
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <div data-role="none" class="footer">
+        <div data-role="navbar">
+            <ul id="2">
+                <li onclick="bref()"><a href="#" class="ui-btn-active ui-state-persist" data-icon="back" id="footer-nav" data-transition="slidefade" data-direction="reverse">ย้อนกลับ</a></li>
+                <li ng-click="selectPicture(Camera.PictureSourceType.CAMERA)"><a href="#" class="ui-btn-active ui-state-persist" data-icon="camera" id="footer-nav" data-transition="slidefade" data-direction="reverse">camera</a></li>
+                <li ng-click="uploadImage()"><a href="#" class="ui-btn-active ui-state-persist" data-icon="cloud" id="footer-nav" data-transition="slidefade" data-direction="reverse">upload</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+<!-- ////////////////////// upload ///////////////////////////////-->
+<!-- ////////////////////// Setting ///////////////////////////////-->
+<div data-role="page" id="setting">
+    <div data-role="none" class="header">
+    </div>
+
+    <div data-role="main" class="ui-content">
+        <div id="form-main">
+            <label style="font-size:20px; padding-top:5%;"><img src="img/barcoder-icon.png" width="32">&nbsp;&nbsp;<b>จัดการ API</b></label>
+            <form name="setting" >
+                <label for="server">server</label>
+                <input type="text" name="server" id="server" placeholder="api server">
+                <input type="hidden" id="apiserver_s" value="http://app.nopadol.com:8080/">
+
+                <label for="searchitem">search item</label>
+                <input type="text" name="searchitem" id="searchitem" placeholder="api search item">
+                <input type="hidden" id="searchitem_h" value="v1/searchItem">
+
+                <label for="updateItem">update barcode</label>
+                <input type="text" name="updateItem" id="updateItem" placeholder="api update Item">
+                <input type="hidden" id="updateItem_h" value="v1/updateItem">
+
+            </form>
+        </div>
+    </div>
+
+    <div data-role="none" class="footer">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#pageone" class="ui-btn-active ui-state-persist" data-icon="back" id="footer-nav" data-transition="slidefade" data-direction="reverse">back</a></li>
+                <li onclick="set_api()"><a href="#" class="ui-btn-active ui-state-persist" data-icon="check" id="footer-nav" data-transition="slidefade" data-direction="reverse">save</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+<!-- ////////////////////// Setting ///////////////////////////////-->
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/ng-cordova.min.js" ></script>
+
+    <script src="js/jquery-1.11.3.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+
+    <script type="text/javascript">app.initialize();</script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-treeview.min.js"></script>
+    <script src="js/alertify.js"></script>
+
+    <!-- ///// js use /// -->
+    <script src="js/itemscan.js"></script>
+    <script src="js/hotkey.js"></script>
+    <script src="js/setting.js"></script>
+    <script src="js/camera.js"></script>
+    <!-- ///// js use /// -->
+</body>
+
+</html>
